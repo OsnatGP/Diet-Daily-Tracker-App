@@ -259,47 +259,6 @@
     .dot-header{aspect-ratio:1;display:grid;place-items:center;font-size:9px;font-weight:700;color:var(--ink3)}
 
     .stats-2col{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--sep);border-radius:12px;overflow:hidden;margin-bottom:0}
-
-    /* ════ NUTRITION ════ */
-    --pink:#FF2D55;--indigo:#5856D6;
-    .nutr-block{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px}
-    .nutr-top{display:flex;align-items:baseline;justify-content:space-between}
-    .nutr-label{font-size:15px;font-weight:600;display:flex;align-items:center;gap:6px}
-    .nutr-label-icon{font-size:17px}
-    .nutr-value{font-size:26px;font-weight:700;letter-spacing:-.5px;transition:color .3s}
-    .nutr-value.ok{color:var(--blue)}.nutr-value.near{color:var(--orange)}.nutr-value.done{color:var(--green)}.nutr-value.over{color:var(--red)}
-    .nutr-sub{font-size:12px;color:var(--ink2)}
-    .nutr-track{height:7px;background:var(--fill);border-radius:999px;overflow:hidden}
-    .nutr-bar{height:100%;border-radius:999px;transition:width .35s cubic-bezier(.4,0,.2,1),background .3s}
-    .nutr-bar.cal.ok  {background:linear-gradient(90deg,#FF9500,#FFCC00)}
-    .nutr-bar.cal.near{background:linear-gradient(90deg,#FF6B00,#FF9500)}
-    .nutr-bar.cal.done{background:var(--green)}
-    .nutr-bar.cal.over{background:var(--red)}
-    .nutr-bar.pro.ok  {background:linear-gradient(90deg,#5856D6,#30B0C7)}
-    .nutr-bar.pro.near{background:linear-gradient(90deg,#AF52DE,#5856D6)}
-    .nutr-bar.pro.done{background:var(--green)}
-    .nutr-bar.pro.over{background:var(--red)}
-    .quick-btns{display:flex;gap:6px;flex-wrap:wrap}
-    .qbtn{
-      height:30px;padding:0 12px;border-radius:999px;border:1.5px solid var(--sep);
-      background:var(--fill);font-size:13px;font-weight:600;color:var(--ink2);
-      cursor:pointer;touch-action:manipulation;font-family:inherit;
-      transition:background .12s,color .12s,border-color .12s;
-    }
-    .qbtn:active{opacity:.55}
-    .qbtn.cal{border-color:rgba(255,149,0,.3);color:var(--orange);background:rgba(255,149,0,.08)}
-    .qbtn.pro{border-color:rgba(88,86,214,.3);color:#5856D6;background:rgba(88,86,214,.08)}
-    .qbtn.minus{border-color:var(--sep);color:var(--ink3);background:var(--fill)}
-    .nutr-manual{display:flex;align-items:center;gap:6px;margin-top:2px}
-    .nutr-input{
-      width:80px;height:34px;border:1.5px solid var(--sep);background:var(--fill2);
-      border-radius:10px;text-align:center;font-size:17px;font-weight:600;
-      font-family:inherit;color:var(--ink);outline:none;-webkit-appearance:none;
-    }
-    .nutr-input.cal:focus{border-color:var(--orange)}
-    .nutr-input.pro:focus{border-color:#5856D6}
-    .nutr-input-unit{font-size:14px;color:var(--ink2)}
-    .nutr-sep{height:.5px;background:var(--sep);margin:0}
   </style>
 </head>
 <body>
@@ -355,7 +314,7 @@
   <div class="section-label" style="margin-top:6px">Food Log</div>
   <div class="group">
     <div class="food-input-wrap">
-      <input class="food-input" id="foodInput" type="text" placeholder="Add a meal or snack…"
+      <input class="food-input" id="foodInput" type="text" placeholder="Add one food or meal item…"
         autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="done"
         onkeydown="if(event.key==='Enter')addFood()"/>
       <button class="food-add" onclick="addFood()">Add</button>
@@ -388,61 +347,15 @@
     </div>
   </div>
 
-  <div class="section-label" style="margin-top:6px">Nutrition</div>
-  <div class="group">
-    <!-- Calories -->
-    <div class="nutr-block">
-      <div class="nutr-top">
-        <div class="nutr-label"><span class="nutr-label-icon">🔥</span>Calories</div>
-        <div class="nutr-value ok" id="calVal">0</div>
-      </div>
-      <div class="nutr-sub" id="calSub">Goal: — kcal</div>
-      <div class="nutr-track"><div class="nutr-bar cal ok" id="calBar" style="width:0%"></div></div>
-      <div class="quick-btns">
-        <button class="qbtn cal" onclick="addNutr('cal',100)">+100</button>
-        <button class="qbtn cal" onclick="addNutr('cal',200)">+200</button>
-        <button class="qbtn cal" onclick="addNutr('cal',300)">+300</button>
-        <button class="qbtn cal" onclick="addNutr('cal',500)">+500</button>
-        <button class="qbtn minus" onclick="addNutr('cal',-50)">−50</button>
-      </div>
-      <div class="nutr-manual">
-        <input class="nutr-input cal" id="calInput" type="number" min="0" max="9999" placeholder="0"
-          oninput="setNutr('cal')" onblur="setNutr('cal')" enterkeyhint="done"/>
-        <span class="nutr-input-unit">kcal manual</span>
-      </div>
-    </div>
-    <div class="nutr-sep"></div>
-    <!-- Protein -->
-    <div class="nutr-block">
-      <div class="nutr-top">
-        <div class="nutr-label"><span class="nutr-label-icon">💪</span>Protein</div>
-        <div class="nutr-value ok" id="proVal">0</div>
-      </div>
-      <div class="nutr-sub" id="proSub">Goal: — g</div>
-      <div class="nutr-track"><div class="nutr-bar pro ok" id="proBar" style="width:0%"></div></div>
-      <div class="quick-btns">
-        <button class="qbtn pro" onclick="addNutr('pro',10)">+10g</button>
-        <button class="qbtn pro" onclick="addNutr('pro',20)">+20g</button>
-        <button class="qbtn pro" onclick="addNutr('pro',30)">+30g</button>
-        <button class="qbtn pro" onclick="addNutr('pro',50)">+50g</button>
-        <button class="qbtn minus" onclick="addNutr('pro',-10)">−10g</button>
-      </div>
-      <div class="nutr-manual">
-        <input class="nutr-input pro" id="proInput" type="number" min="0" max="999" placeholder="0"
-          oninput="setNutr('pro')" onblur="setNutr('pro')" enterkeyhint="done"/>
-        <span class="nutr-input-unit">g manual</span>
-      </div>
-    </div>
-  </div>
 
-  <div class="section-label" style="margin-top:6px">Summary</div>
+  <div class="section-label" style="margin-top:6px">Daily Summary</div>
   <div class="summary-grid">
     <div class="stat-cell"><div class="stat-num blue"  id="sWater">0</div><div class="stat-lbl">Water cups</div></div>
     <div class="stat-cell"><div class="stat-num green" id="sTea">0</div><div class="stat-lbl">Tea cups</div></div>
     <div class="stat-cell"><div class="stat-num orange" id="sCoffee">0</div><div class="stat-lbl">Coffee cups</div></div>
     <div class="stat-cell"><div class="stat-num purple" id="sWeight">—</div><div class="stat-lbl">Weight kg</div></div>
-    <div class="stat-cell"><div class="stat-num" style="color:var(--orange)" id="sCal">0</div><div class="stat-lbl">🔥 Calories</div></div>
-    <div class="stat-cell"><div class="stat-num" style="color:#5856D6" id="sPro">0</div><div class="stat-lbl">💪 Protein g</div></div>
+    <div class="stat-cell"><div class="stat-num" style="color:var(--orange)" id="sCal">0</div><div class="stat-lbl">Total calories</div></div>
+    <div class="stat-cell"><div class="stat-num" style="color:#5856D6" id="sPro">0</div><div class="stat-lbl">Total protein g</div></div>
   </div>
 </div>
 
@@ -691,13 +604,6 @@ function renderToday(s){
   const we=document.getElementById('sWeight'); we.textContent=s.weight||'—'; we.className='stat-num purple';
   document.getElementById('sCal').textContent = s.cal||0;
   document.getElementById('sPro').textContent = s.pro||0;
-
-  // nutrition
-  const st2=loadSettings();
-  renderNutrBar('cal', s.cal||0, st2.calGoal||0);
-  renderNutrBar('pro', s.pro||0, st2.proGoal||0);
-  const ci=document.getElementById('calInput'); if(!ci.matches(':focus')) ci.value=s.cal||0;
-  const pi=document.getElementById('proInput'); if(!pi.matches(':focus')) pi.value=s.pro||0;
 }
 
 /* ════════════ TODAY ACTIONS ════════════ */
@@ -751,44 +657,6 @@ function saveNutrGoals(){
 function updateNutrGoalSubs(st){
   document.getElementById('calGoalSub').textContent = st.calGoal ? `${st.calGoal} kcal/day` : 'Set daily target';
   document.getElementById('proGoalSub').textContent = st.proGoal ? `${st.proGoal} g/day`    : 'Set daily target';
-}
-function renderNutrBar(type, val, goal){
-  const isCal = type==='cal';
-  const valEl = document.getElementById(isCal?'calVal':'proVal');
-  const subEl = document.getElementById(isCal?'calSub':'proSub');
-  const barEl = document.getElementById(isCal?'calBar':'proBar');
-  const unit  = isCal?'kcal':'g';
-  valEl.textContent = val;
-  if(goal>0){
-    const pct = Math.min(110, Math.round(val/goal*100));
-    const over = val > goal;
-    const near = !over && pct >= 80;
-    const done = !over && val >= goal;
-    const state = over?'over':done?'done':near?'near':'ok';
-    valEl.className  = `nutr-value ${state}`;
-    barEl.style.width= Math.min(100,pct)+'%';
-    barEl.className  = `nutr-bar ${type} ${state}`;
-    const left = Math.max(0,goal-val);
-    subEl.textContent = over
-      ? `${val-goal}${unit} over goal (${goal}${unit})`
-      : done ? `Goal reached! (${goal}${unit})`
-      : `${left}${unit} to goal · ${pct}%`;
-  } else {
-    valEl.className  = 'nutr-value ok';
-    barEl.style.width= '0%';
-    barEl.className  = `nutr-bar ${type} ok`;
-    subEl.textContent= `${val} ${unit} today · set goal in Stats`;
-  }
-}
-function addNutr(type, delta){
-  const s=loadToday();
-  s[type]=Math.max(0,(s[type]||0)+delta);
-  saveToday(s); renderToday(s);
-}
-function setNutr(type){
-  const el=document.getElementById(type==='cal'?'calInput':'proInput');
-  const v=parseInt(el.value);
-  const s=loadToday(); s[type]=isNaN(v)?0:Math.max(0,v); saveToday(s); renderToday(s);
 }
 
 /* ════════════ HISTORY ════════════ */
