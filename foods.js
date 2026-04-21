@@ -49,8 +49,8 @@ window.FOOD_DB = [
    keys:['שרימפס','גמבה','shrimp','prawns']},
 
   /* ──── DAIRY — CHEESE ──── */
-  {id:'cottage',        cal:103, pro:11, srv:250, srvName:'גביע קוטג׳',
-   keys:['קוטג','קוטג׳','cottage','cottage cheese']},
+  {id:'cottage_strauss_5', cal:97, pro:10.2, srv:250, srvName:'חבילת קוטג׳ 5%',
+   keys:['קוטג','קוטג׳','קוטג 5','קוטג 5%','קוטג׳ 5%','חבילת קוטג','גביע קוטג','קופסת קוטג','cottage','cottage cheese','strauss cottage']},
   {id:'labaneh',        cal:170, pro:9,  srv:100, srvName:'2 כפות לבנה',
    keys:['לבנה','labaneh','labane','labaneh cheese']},
   {id:'yellow_cheese',  cal:400, pro:25, srv:30,  srvName:'פרוסת גבינה צהובה',
@@ -83,6 +83,10 @@ window.FOOD_DB = [
    keys:['לבן','leben','drinking yogurt','לבן לשתיה']},
   {id:'chocolate_milk', cal:83,  pro:3.4,srv:250, srvName:'כוס חלב שוקולד',
    keys:['שוקולד חלב','חלב שוקולד','chocolate milk','cocoa milk']},
+  {id:'skyr_3_small',   cal:79,  pro:8.7,srv:125, srvName:'גביע סקי 3% קטן',
+   keys:['סקי','סקי 3','סקי 3%','סקי קטן','גבינת סקי','גבינת סקי 3%','חבילת סקי','גביע סקי','skyr','skyr 3%','small skyr']},
+  {id:'danone_pro_20_15', cal:70, pro:10, srv:200, srvName:'גביע דנונה PRO 20 1.5%',
+   keys:['דנונה פרו','דנונה פרו 20','דנונה pro','danone pro','pro 20','יוגורט פרו 20','יוגורט דנונה פרו 20','דנונה פרו 20 1.5','דנונה פרו 20 1.5%','danone pro 20','danone pro 20 1.5%','pro 20 yogurt']},
 
   /* ──── LEGUMES ──── */
   {id:'hummus_prepared',cal:166, pro:8,  srv:100, srvName:'2 כפות חומוס',
@@ -211,6 +215,10 @@ window.FOOD_DB = [
    keys:['מיונז','mayonnaise','mayo']},
   {id:'techina',        cal:595, pro:17, srv:30,  srvName:'2 כפות טחינה',
    keys:['טחינה גולמית','raw tahini','sesame']},
+  {id:'honey_teaspoon', cal:304, pro:0.3,srv:7,   srvName:'כפית דבש',
+   keys:['כפית דבש','דבש','honey','teaspoon honey','1 tsp honey']},
+  {id:'walnut_half',   cal:654, pro:15.2,srv:2,   srvName:'חצי אגוז מלך',
+   keys:['חצי אגוז מלך','אגוז מלך','אגוזי מלך','walnut','walnuts','half walnut','walnut half']},
 
   /* ──── ISRAELI DISHES ──── */
   {id:'shakshuka',      cal:110, pro:7,  srv:300, srvName:'מנת שקשוקה',

@@ -64,7 +64,7 @@
     .tab:active{opacity:.5}
     .tab-icon{font-size:22px;line-height:1}
     .tab-label{font-size:10px;font-weight:500;color:var(--ink3)}
-    .tab.active .tab-label{color:var(--blue)}
+    .tab.active .tab-label{color:var(--ink)}
     .tab:not(.active) .tab-icon{opacity:.4}
 
     /* ── headers ── */
@@ -92,9 +92,7 @@
 
     /* ── drink components ── */
     .drink-icon{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-size:17px;flex-shrink:0}
-    .drink-icon.water {background:rgba(0,122,255,.1)}
-    .drink-icon.tea   {background:rgba(52,199,89,.1)}
-    .drink-icon.coffee{background:rgba(255,149,0,.1)}
+    .drink-icon.water,.drink-icon.tea,.drink-icon.coffee{background:var(--fill); color:var(--ink2); font-weight:700}
     .drink-label{flex:1}
     .drink-name{font-size:17px}
     .drink-tag{font-size:12px;font-weight:500;color:var(--ink3);margin-top:1px}
@@ -131,7 +129,7 @@
     .chip.orange{background:rgba(255,149,0,.1);color:var(--orange)}
 
     /* ── weight row ── */
-    .weight-icon{width:30px;height:30px;border-radius:8px;background:rgba(175,82,222,.1);display:grid;place-items:center;font-size:17px;flex-shrink:0}
+    .weight-icon{width:30px;height:30px;border-radius:8px;background:var(--fill);display:grid;place-items:center;font-size:13px;font-weight:700;color:var(--ink2);flex-shrink:0}
     .weight-input{
       width:80px;height:36px;border:1.5px solid var(--sep);background:var(--fill2);
       border-radius:10px;text-align:center;font-size:20px;font-weight:600;
@@ -147,7 +145,7 @@
 
     /* ── leptine toggle ── */
     .lep-row{padding:14px 16px;display:flex;align-items:center;gap:12px}
-    .lep-icon{width:30px;height:30px;border-radius:8px;background:rgba(48,176,199,.1);display:grid;place-items:center;font-size:17px;flex-shrink:0}
+    .lep-icon{width:30px;height:30px;border-radius:8px;background:var(--fill);display:grid;place-items:center;font-size:13px;font-weight:700;color:var(--ink2);flex-shrink:0}
     .lep-label{flex:1}
     .lep-name{font-size:17px}
     .lep-sub{font-size:12px;color:var(--ink2);margin-top:1px}
@@ -157,8 +155,9 @@
       background:none;font-size:14px;font-weight:600;cursor:pointer;
       touch-action:manipulation;transition:all .15s;font-family:inherit;color:var(--ink2);
     }
-    .lep-btn.yes.active{background:var(--green);border-color:var(--green);color:#fff}
-    .lep-btn.no.active {background:var(--red);  border-color:var(--red);  color:#fff}
+    .lep-btn.yes.active,.meal-btn.active{background:#1C1C1E;border-color:#1C1C1E;color:#fff}
+    .lep-btn.partial.active{background:#8E8E93;border-color:#8E8E93;color:#fff}
+    .lep-btn.no.active {background:#C7C7CC;  border-color:#C7C7CC;  color:#1C1C1E}
     .lep-btn:active{opacity:.6}
 
     /* ── food ── */
@@ -259,6 +258,17 @@
     .dot-header{aspect-ratio:1;display:grid;place-items:center;font-size:9px;font-weight:700;color:var(--ink3)}
 
     .stats-2col{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--sep);border-radius:12px;overflow:hidden;margin-bottom:0}
+
+    .meal-row{padding:14px 16px;display:flex;align-items:center;gap:12px}
+    .meal-icon{width:30px;height:30px;border-radius:8px;background:var(--fill);display:grid;place-items:center;font-size:13px;font-weight:700;color:var(--ink2);flex-shrink:0}
+    .meal-label{flex:1}
+    .meal-name{font-size:17px}
+    .meal-sub{font-size:12px;color:var(--ink2);margin-top:1px}
+    .meal-btns{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+    .meal-btn{height:32px;min-width:38px;padding:0 10px;border-radius:999px;border:1.5px solid var(--sep);background:none;font-size:14px;font-weight:600;cursor:pointer;touch-action:manipulation;font-family:inherit;color:var(--ink2)}
+    .meal-btn.plus{min-width:46px}
+    .dot-cell.partial{background:#D1D1D6;color:#1C1C1E}
+
   </style>
 </head>
 <body>
@@ -283,7 +293,7 @@
   </div>
   <div class="group">
     <div class="row">
-      <div class="drink-icon water">💧</div>
+      <div class="drink-icon water">W</div>
       <div class="drink-label"><div class="drink-name">Water</div><div class="drink-tag goal">Counts toward goal</div></div>
       <div class="stepper">
         <button class="step-btn" onclick="change('water',-1)">−</button><div class="step-div"></div>
@@ -292,7 +302,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="drink-icon tea">🍵</div>
+      <div class="drink-icon tea">T</div>
       <div class="drink-label"><div class="drink-name">Tea</div><div class="drink-tag goal">Counts toward goal</div></div>
       <div class="stepper">
         <button class="step-btn" onclick="change('tea',-1)">−</button><div class="step-div"></div>
@@ -301,7 +311,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="drink-icon coffee">☕</div>
+      <div class="drink-icon coffee">C</div>
       <div class="drink-label"><div class="drink-name">Coffee</div><div class="drink-tag limit" id="tagCoffee">Max 2 cups</div></div>
       <div class="stepper">
         <button class="step-btn" onclick="change('coffee',-1)">−</button><div class="step-div"></div>
@@ -322,11 +332,29 @@
     <div id="foodList"></div>
   </div>
 
+  <div class="section-label" style="margin-top:6px">Meals</div>
+  <div class="group">
+    <div class="meal-row">
+      <div class="meal-icon">ML</div>
+      <div class="meal-label">
+        <div class="meal-name">How many meals did you eat?</div>
+        <div class="meal-sub" id="mealsSub">Select today's count</div>
+      </div>
+      <div class="meal-btns">
+        <button class="meal-btn" id="meal1" onclick="setMealsCount(1)">1</button>
+        <button class="meal-btn" id="meal2" onclick="setMealsCount(2)">2</button>
+        <button class="meal-btn" id="meal3" onclick="setMealsCount(3)">3</button>
+        <button class="meal-btn" id="meal4" onclick="setMealsCount(4)">4</button>
+        <button class="meal-btn plus" id="meal5" onclick="setMealsCount(5)">5+</button>
+      </div>
+    </div>
+  </div>
+
   <div class="section-label" style="margin-top:6px">Body & Diet</div>
   <div class="group">
     <!-- weight -->
     <div class="row">
-      <div class="weight-icon">⚖️</div>
+      <div class="weight-icon">KG</div>
       <div class="drink-label"><div class="drink-name">Weight</div><div class="drink-tag" id="weightSub">Enter today's weight</div></div>
       <input class="weight-input" id="weightInput" type="number" step="0.1" min="30" max="300" placeholder="—"
         oninput="saveWeight()" onblur="saveWeight()"/>
@@ -335,14 +363,15 @@
     </div>
     <!-- leptine -->
     <div class="lep-row">
-      <div class="lep-icon">🥗</div>
+      <div class="lep-icon">LP</div>
       <div class="lep-label">
         <div class="lep-name">Leptine diet</div>
         <div class="lep-sub" id="lepSub">Did you follow it today?</div>
       </div>
       <div class="lep-btns">
-        <button class="lep-btn yes" id="lepYes" onclick="setLeptine(true)">Yes</button>
-        <button class="lep-btn no"  id="lepNo"  onclick="setLeptine(false)">No</button>
+        <button class="lep-btn yes" id="lepYes" onclick="setLeptine('yes')">Yes</button>
+        <button class="lep-btn partial" id="lepPartial" onclick="setLeptine('partial')">Partly</button>
+        <button class="lep-btn no"  id="lepNo"  onclick="setLeptine('no')">No</button>
       </div>
     </div>
   </div>
@@ -353,9 +382,10 @@
     <div class="stat-cell"><div class="stat-num blue"  id="sWater">0</div><div class="stat-lbl">Water cups</div></div>
     <div class="stat-cell"><div class="stat-num green" id="sTea">0</div><div class="stat-lbl">Tea cups</div></div>
     <div class="stat-cell"><div class="stat-num orange" id="sCoffee">0</div><div class="stat-lbl">Coffee cups</div></div>
+    <div class="stat-cell"><div class="stat-num teal" id="sMeals">—</div><div class="stat-lbl">Meals</div></div>
     <div class="stat-cell"><div class="stat-num purple" id="sWeight">—</div><div class="stat-lbl">Weight kg</div></div>
-    <div class="stat-cell"><div class="stat-num" style="color:var(--orange)" id="sCal">0</div><div class="stat-lbl">Total calories</div></div>
-    <div class="stat-cell"><div class="stat-num" style="color:#5856D6" id="sPro">0</div><div class="stat-lbl">Total protein g</div></div>
+    <div class="stat-cell"><div class="stat-num" style="color:var(--orange)" id="sCal">0</div><div class="stat-lbl">Calories</div></div>
+    <div class="stat-cell"><div class="stat-num" style="color:#5856D6" id="sPro">0</div><div class="stat-lbl">Protein g</div></div>
   </div>
 </div>
 
@@ -391,14 +421,14 @@
   <div class="section-label" style="margin-top:6px">Nutrition Goals</div>
   <div class="group">
     <div class="goal-set-row">
-      <div><div class="goal-set-label">🔥 Daily calories</div><div class="goal-set-sub" id="calGoalSub">Set daily target</div></div>
+      <div><div class="goal-set-label">Daily calories</div><div class="goal-set-sub" id="calGoalSub">Set daily target</div></div>
       <input class="goal-input" id="calGoalInput" type="number" step="50" min="500" max="9999" placeholder="—"
         oninput="saveNutrGoals()" onblur="saveNutrGoals()"/>
       <span style="font-size:15px;color:var(--ink2);margin-left:4px">kcal</span>
     </div>
     <div style="height:.5px;background:var(--sep);margin:0 16px"></div>
     <div class="goal-set-row">
-      <div><div class="goal-set-label">💪 Daily protein</div><div class="goal-set-sub" id="proGoalSub">Set daily target</div></div>
+      <div><div class="goal-set-label">Daily protein</div><div class="goal-set-sub" id="proGoalSub">Set daily target</div></div>
       <input class="goal-input" id="proGoalInput" type="number" step="5" min="10" max="500" placeholder="—"
         oninput="saveNutrGoals()" onblur="saveNutrGoals()"/>
       <span style="font-size:15px;color:var(--ink2);margin-left:4px">g</span>
@@ -471,9 +501,9 @@
 
 <!-- ══ TAB BAR ══ -->
 <nav class="tabbar">
-  <div class="tab active" id="tab-today"   onclick="switchTab('today')">  <div class="tab-icon">☀️</div><div class="tab-label">Today</div></div>
-  <div class="tab"        id="tab-history" onclick="switchTab('history')"><div class="tab-icon">📋</div><div class="tab-label">History</div></div>
-  <div class="tab"        id="tab-stats"   onclick="switchTab('stats')">  <div class="tab-icon">📊</div><div class="tab-label">Stats</div></div>
+  <div class="tab active" id="tab-today"   onclick="switchTab('today')">  <div class="tab-icon">◉</div><div class="tab-label">Today</div></div>
+  <div class="tab"        id="tab-history" onclick="switchTab('history')"><div class="tab-icon">≣</div><div class="tab-label">History</div></div>
+  <div class="tab"        id="tab-stats"   onclick="switchTab('stats')">  <div class="tab-icon">◌</div><div class="tab-label">Stats</div></div>
 </nav>
 
 <script>
@@ -491,6 +521,9 @@ function loadToday(){
     const d = JSON.parse(raw);
     if(d.date !== todayKey()){ archiveDay(d); return freshDay(); }
     d.foods = migrateFoods(d.foods);
+    if(d.mealsCount===undefined) d.mealsCount = null;
+    if(d.leptine===true) d.leptine='yes';
+    else if(d.leptine===false) d.leptine='no';
     // recalc totals from food items (source of truth)
     const foodCal = d.foods.reduce((a,f)=>a+(f.cal||0),0);
     const foodPro = d.foods.reduce((a,f)=>a+(f.pro||0),0);
@@ -498,7 +531,7 @@ function loadToday(){
     return d;
   }catch{ return freshDay(); }
 }
-function freshDay(){ return {date:todayKey(),water:0,tea:0,coffee:0,foods:[],weight:null,leptine:null,cal:0,pro:0}; }
+function freshDay(){ return {date:todayKey(),water:0,tea:0,coffee:0,foods:[],mealsCount:null,weight:null,leptine:null,cal:0,pro:0}; }
 
 // migrate old string-based foods to objects
 function migrateFoods(foods){
@@ -511,7 +544,7 @@ function saveToday(s){
 function archiveDay(s){
   try{
     const h = loadHistory();
-    h[s.date] = {water:s.water,tea:s.tea,coffee:s.coffee,meals:s.foods.length,weight:s.weight,leptine:s.leptine,cal:s.cal||0,pro:s.pro||0};
+    h[s.date] = {water:s.water,tea:s.tea,coffee:s.coffee,meals:s.mealsCount ?? s.foods.length,weight:s.weight,leptine:s.leptine,cal:s.cal||0,pro:s.pro||0};
     localStorage.setItem('dt_history', JSON.stringify(h));
   }catch{}
 }
@@ -571,12 +604,18 @@ function renderToday(s){
   }
 
   // leptine buttons
-  document.getElementById('lepYes').classList.toggle('active', s.leptine===true);
-  document.getElementById('lepNo').classList.toggle('active',  s.leptine===false);
+  document.getElementById('lepYes').classList.toggle('active', s.leptine==='yes');
+  document.getElementById('lepPartial').classList.toggle('active', s.leptine==='partial');
+  document.getElementById('lepNo').classList.toggle('active',  s.leptine==='no');
   const streak = calcStreak(hist, todayKey());
   document.getElementById('lepSub').textContent =
-    s.leptine===true ? `✅ Yes — streak: ${streak} day${streak!==1?'s':''}` :
-    s.leptine===false ? '❌ Not today' : 'Did you follow it today?';
+    s.leptine==='yes' ? `Yes — streak: ${streak} day${streak!==1?'s':''}` :
+    s.leptine==='partial' ? 'Partial today' :
+    s.leptine==='no' ? 'Not today' : 'Did you follow it today?';
+
+  // meals count
+  [1,2,3,4,5].forEach(n=>document.getElementById(`meal${n}`).classList.toggle('active', s.mealsCount===n));
+  document.getElementById('mealsSub').textContent = s.mealsCount ? `Logged: ${s.mealsCount===5?'5+':s.mealsCount} meal${s.mealsCount===1?'':'s'}` : 'Select today's count';
 
   // food
   const list = document.getElementById('foodList');
@@ -601,6 +640,7 @@ function renderToday(s){
   document.getElementById('sWater').textContent  = s.water;
   document.getElementById('sTea').textContent    = s.tea;
   const ce=document.getElementById('sCoffee'); ce.textContent=s.coffee; ce.className=over?'stat-num red':'stat-num orange';
+  const me=document.getElementById('sMeals'); me.textContent=s.mealsCount ? (s.mealsCount===5?'5+':s.mealsCount) : '—'; me.className='stat-num teal';
   const we=document.getElementById('sWeight'); we.textContent=s.weight||'—'; we.className='stat-num purple';
   document.getElementById('sCal').textContent = s.cal||0;
   document.getElementById('sPro').textContent = s.pro||0;
@@ -616,6 +656,9 @@ function saveWeight(){
 }
 function setLeptine(val){
   const s=loadToday(); s.leptine=(s.leptine===val?null:val); saveToday(s); renderToday(s);
+}
+function setMealsCount(val){
+  const s=loadToday(); s.mealsCount=(s.mealsCount===val?null:val); saveToday(s); renderToday(s);
 }
 function addFood(){
   const el=document.getElementById('foodInput'); const t=el.value.trim(); if(!t){el.focus();return;}
@@ -716,12 +759,13 @@ function renderDailyHist(hist,el){
     const wtPct=Math.min(100,Math.round(cnt/WATER_GOAL*100));
     const coffPct=e?Math.min(100,Math.round(e.coffee/COFFEE_LIMIT*100)):0;
     const wStr=e?.weight?`· ${e.weight}kg`:'';
-    const lepStr=e?.leptine===true?'· 🥗':'';
+    const lepStr=e?.leptine==='yes' || e?.leptine===true ? '· LP yes' : e?.leptine==='partial' ? '· LP partial' : '';
+    const mealsStr=e?.meals?` · ${e.meals===5?'5+':e.meals} meals`:'';
     html+=`<div class="hist-row">
       <div class="hist-date"><span class="day-num">${day}</span>${label}<br><span style="font-size:11px">${mon}</span></div>
       <div class="hist-bars">${e
-        ?miniBar(wtPct,'var(--blue)',`${cnt}/${WATER_GOAL} WT ${wStr}${lepStr}`)
-        +miniBar(coffPct,e.coffee>COFFEE_LIMIT?'var(--red)':'var(--orange)',`${e.coffee}☕`)
+        ?miniBar(wtPct,'var(--blue)',`${cnt}/${WATER_GOAL} WT ${wStr}${lepStr}${mealsStr}`)
+        +miniBar(coffPct,e.coffee>COFFEE_LIMIT?'var(--red)':'var(--orange)',`${e.coffee}C`)
         :`<div style="font-size:13px;color:var(--ink3)">No data</div>`}
       </div>
       <div class="hist-status">${drinkStatus(e)}</div></div>`;
@@ -752,7 +796,7 @@ function renderWeeklyHist(hist,el){
     <div class="period-stats">
       <div class="pstat"><div class="pstat-val" style="color:var(--blue)">${sumWT}</div><div class="pstat-lbl">Total cups</div></div>
       <div class="pstat"><div class="pstat-val" style="color:var(--green)">${sumGoals}</div><div class="pstat-lbl">Goal days</div></div>
-      <div class="pstat"><div class="pstat-val" style="color:var(--teal)">${agg.slice(0,4).reduce((a,b)=>a+b.lep,0)}</div><div class="pstat-lbl">🥗 Leptine</div></div>
+      <div class="pstat"><div class="pstat-val" style="color:var(--teal)">${agg.slice(0,4).reduce((a,b)=>a+b.lep,0)}</div><div class="pstat-lbl">LP Leptine</div></div>
     </div></div></div><div class="group">`;
 
   weeks.forEach((days,wi)=>{
@@ -767,8 +811,8 @@ function renderWeeklyHist(hist,el){
         ${isNow?'<span style="color:var(--blue);font-size:11px;font-weight:700">Now</span>':`<span style="font-size:11px">${d0.mon}</span>`}
       </div>
       <div class="hist-bars">${s.count>0
-        ?miniBar(wtPct,'var(--blue)',`${s.total}cups · ${s.lep}🥗`)
-        +miniBar(coffPct,s.coffee>7*COFFEE_LIMIT?'var(--red)':'var(--orange)',`${s.coffee}☕ · ${s.goals}✅`)
+        ?miniBar(wtPct,'var(--blue)',`${s.total}cups · ${s.lep}LP`)
+        +miniBar(coffPct,s.coffee>7*COFFEE_LIMIT?'var(--red)':'var(--orange)',`${s.coffee}C · ${s.goals}✅`)
         :`<div style="font-size:13px;color:var(--ink3)">No data</div>`}
       </div>
       <div class="hist-status">${s.count>0?(s.goals===s.count?'✅':s.goals>s.count/2?'🟡':'❌'):'—'}</div></div>`;
@@ -796,8 +840,8 @@ function renderMonthlyHist(hist,el){
         ${isNow?'<br><span style="font-size:10px;color:var(--blue);font-weight:700">Now</span>':''}
       </div>
       <div class="hist-bars">${count>0
-        ?miniBar(wtPct,'var(--blue)',`${total}cups · ${lep}🥗`)
-        +miniBar(coffPct,coffee>maxD*COFFEE_LIMIT?'var(--red)':'var(--orange)',`${coffee}☕ · ${goals}✅`)
+        ?miniBar(wtPct,'var(--blue)',`${total}cups · ${lep}LP`)
+        +miniBar(coffPct,coffee>maxD*COFFEE_LIMIT?'var(--red)':'var(--orange)',`${coffee}C · ${goals}✅`)
         :`<div style="font-size:13px;color:var(--ink3)">No data</div>`}
       </div>
       <div class="hist-status">${count>0?(goals===count?'✅':goals>count/2?'🟡':'❌'):'—'}</div></div>`;
@@ -816,14 +860,14 @@ function renderYearlyHist(hist,el){
     <div class="period-stats">
       <div class="pstat"><div class="pstat-val" style="color:var(--blue)">${agg.reduce((a,b)=>a+b.total,0)}</div><div class="pstat-lbl">Total cups</div></div>
       <div class="pstat"><div class="pstat-val" style="color:var(--green)">${agg.reduce((a,b)=>a+b.goals,0)}</div><div class="pstat-lbl">Goal days</div></div>
-      <div class="pstat"><div class="pstat-val" style="color:var(--teal)">${agg.reduce((a,b)=>a+b.lep,0)}</div><div class="pstat-lbl">🥗 Leptine</div></div>
+      <div class="pstat"><div class="pstat-val" style="color:var(--teal)">${agg.reduce((a,b)=>a+b.lep,0)}</div><div class="pstat-lbl">LP Leptine</div></div>
     </div></div></div><div class="group">`;
   agg.forEach(({year,total,goals,coffee,count,lep})=>{
     const isNow=year===String(new Date().getFullYear());
     const wtPct=Math.round(total/maxWT*100);
     html+=`<div class="hist-row">
       <div class="hist-date" style="width:52px"><span class="day-num" style="font-size:20px">${year}</span>${isNow?'<span style="font-size:10px;color:var(--blue);font-weight:700">Now</span>':''}</div>
-      <div class="hist-bars">${miniBar(wtPct,'var(--blue)',`${total}cups · ${lep}🥗`)}${miniBar(Math.min(100,Math.round(coffee/(count*COFFEE_LIMIT||1)*100)),coffee>count*COFFEE_LIMIT?'var(--red)':'var(--orange)',`${coffee}☕ · ${goals}✅`)}</div>
+      <div class="hist-bars">${miniBar(wtPct,'var(--blue)',`${total}cups · ${lep}LP`)}${miniBar(Math.min(100,Math.round(coffee/(count*COFFEE_LIMIT||1)*100)),coffee>count*COFFEE_LIMIT?'var(--red)':'var(--orange)',`${coffee}C · ${goals}✅`)}</div>
       <div class="hist-status">${goals===count?'✅':goals>count/2?'🟡':'❌'}</div></div>`;
   });
   el.innerHTML=html+'</div>';
@@ -994,7 +1038,7 @@ function calcStreak(hist, upToDate){
   while(true){
     const key=d.toISOString().slice(0,10);
     const lep= key===todayKey() ? td.leptine : hist[key]?.leptine;
-    if(lep===true) streak++;
+    if(lep==='yes' || lep===true) streak++;
     else break;
     d.setDate(d.getDate()-1);
   }
@@ -1019,7 +1063,7 @@ function renderLeptineStats(){
   // record streak
   let rec=0,cur=0;
   [...allKeys].forEach(k=>{
-    if(fullHist[k]?.leptine===true){cur++;rec=Math.max(rec,cur);}
+    if(fullHist[k]?.leptine==='yes' || fullHist[k]?.leptine===true){cur++;rec=Math.max(rec,cur);}
     else cur=0;
   });
   document.getElementById('streakRecord').textContent=rec;
@@ -1027,8 +1071,8 @@ function renderLeptineStats(){
   // this month adherence
   const now=new Date();
   const monthKeys=allKeys.filter(k=>k.startsWith(`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`));
-  const monthYes=monthKeys.filter(k=>fullHist[k]?.leptine===true).length;
-  const monthPct=monthKeys.length?Math.round(monthYes/monthKeys.length*100):0;
+  const monthScore=monthKeys.reduce((a,k)=>a + ((fullHist[k]?.leptine==='yes' || fullHist[k]?.leptine===true)?1:(fullHist[k]?.leptine==='partial'?0.5:0)),0);
+  const monthPct=monthKeys.length?Math.round(monthScore/monthKeys.length*100):0;
   document.getElementById('streakMonth').textContent=monthPct+'%';
 
   // 4-week dot grid (Mon–Sun, 4 rows)
@@ -1044,7 +1088,7 @@ function renderLeptineStats(){
     const key=d.toISOString().slice(0,10);
     const lep=fullHist[key]?.leptine;
     const isT=key===today;
-    const cls=lep===true?'yes':lep===false?'no':'empty';
+    const cls=(lep==='yes' || lep===true)?'yes':(lep==='partial'?'partial':(lep==='no' || lep===false)?'no':'empty');
     const day=d.getDate();
     gridHTML+=`<div class="dot-cell ${cls}" ${isT?'style="outline:2px solid var(--teal);outline-offset:1px"':''}>${day}</div>`;
   }
@@ -1053,14 +1097,15 @@ function renderLeptineStats(){
 
   // all-time stats
   const total=allKeys.length;
-  const totalYes=allKeys.filter(k=>fullHist[k]?.leptine===true).length;
-  const totalNo =allKeys.filter(k=>fullHist[k]?.leptine===false).length;
-  const overall=total?Math.round(totalYes/total*100):0;
+  const totalYes=allKeys.filter(k=>fullHist[k]?.leptine==='yes' || fullHist[k]?.leptine===true).length;
+  const totalPartial=allKeys.filter(k=>fullHist[k]?.leptine==='partial').length;
+  const totalNo =allKeys.filter(k=>fullHist[k]?.leptine==='no' || fullHist[k]?.leptine===false).length;
+  const overall=total?Math.round((totalYes + totalPartial*0.5)/total*100):0;
   document.getElementById('lepStats').innerHTML=`
-    <div class="stat-cell"><div class="stat-num teal">${totalYes}</div><div class="stat-lbl">Days followed</div></div>
-    <div class="stat-cell"><div class="stat-num">${totalNo}</div><div class="stat-lbl">Days skipped</div></div>
+    <div class="stat-cell"><div class="stat-num teal">${totalYes}</div><div class="stat-lbl">Yes days</div></div>
+    <div class="stat-cell"><div class="stat-num">${totalPartial}</div><div class="stat-lbl">Partial days</div></div>
     <div class="stat-cell"><div class="stat-num teal">${overall}%</div><div class="stat-lbl">Adherence rate</div></div>
-    <div class="stat-cell"><div class="stat-num">${total}</div><div class="stat-lbl">Days tracked</div></div>`;
+    <div class="stat-cell"><div class="stat-num">${totalNo}</div><div class="stat-lbl">No days</div></div>`;
 }
 
 /* ════════════ TABS ════════════ */
@@ -1083,41 +1128,29 @@ function esc(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/
   c.width = c.height = S;
   const ctx = c.getContext('2d');
 
-  // white background with very subtle shadow-inset feel
-  ctx.fillStyle = '#FFFFFF';
-  roundRect(ctx, 0, 0, S, S, S * 0.2225); // iOS icon radius ratio
+  ctx.fillStyle = '#F7F7F8';
+  roundRect(ctx, 0, 0, S, S, S * 0.2225);
   ctx.fill();
 
-  // subtle light-grey inner border
-  ctx.strokeStyle = 'rgba(0,0,0,0.06)';
+  ctx.strokeStyle = 'rgba(0,0,0,0.08)';
   ctx.lineWidth = 4;
   roundRect(ctx, 2, 2, S-4, S-4, S * 0.2225);
   ctx.stroke();
 
-  // soft blue accent circle in background
-  const grd = ctx.createRadialGradient(S*0.5, S*0.42, 0, S*0.5, S*0.42, S*0.38);
-  grd.addColorStop(0, 'rgba(0,122,255,0.08)');
-  grd.addColorStop(1, 'rgba(0,122,255,0)');
-  ctx.fillStyle = grd;
-  ctx.beginPath(); ctx.arc(S*0.5, S*0.42, S*0.38, 0, Math.PI*2); ctx.fill();
-
-  // letter D — clean, bold, centered
   ctx.fillStyle = '#1C1C1E';
-  ctx.font = `700 ${S*0.62}px -apple-system, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif`;
+  ctx.font = `700 ${S*0.60}px -apple-system, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText('D', S * 0.52, S * 0.50);
+  ctx.fillText('D', S * 0.50, S * 0.50);
 
-  // tiny dot under D — accent
-  ctx.fillStyle = '#007AFF';
+  ctx.strokeStyle = 'rgba(0,0,0,0.12)';
+  ctx.lineWidth = Math.max(2, S*0.012);
   ctx.beginPath();
-  ctx.arc(S * 0.52, S * 0.82, S * 0.035, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.arc(S * 0.50, S * 0.82, S * 0.028, 0, Math.PI * 2);
+  ctx.stroke();
 
   const dataURL = c.toDataURL('image/png');
   document.getElementById('apple-touch-icon').href = dataURL;
-
-  // also set as favicon
   const fav = document.createElement('link');
   fav.rel = 'icon'; fav.type = 'image/png'; fav.href = dataURL;
   document.head.appendChild(fav);
@@ -1135,7 +1168,7 @@ function esc(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/
     ctx.quadraticCurveTo(x, y, x+r, y);
     ctx.closePath();
   }
-})();
+})();;
 
 /* ════════════ INIT ════════════ */
 renderToday(loadToday());
