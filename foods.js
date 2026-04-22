@@ -302,6 +302,17 @@ var FOOD_DB = [
   {id:'soy_sauce',      cal:53,  pro:8,  fat:0.1, carb:5.6,  srv:15,  srvName:'כף סויה',
    keys:['סויה','רוטב סויה','soy sauce','tamari']},
 
+  /* ──── PERSONAL PRESETS ──── */
+  {id:'salad_tahini', cal:45.2, pro:1.5, fat:3.0, carb:4.1, srv:630, srvName:'סלט ירקות עם טחינה (10 עגבניות שרי, 2 מלפפון, פלפל, 2כפות טחינה)',
+   keys:['סלט ירקות עם טחינה','סלט עם טחינה','salad tahini','סלט ירקות']},
+  {id:'yogurt_apple_honey_walnuts', cal:89.7, pro:5.3, fat:3.2, carb:10.6, srv:428, srvName:'יוגורט דנונה פרו 20 + תפוח + 4 אגוזי מלך + 2כפות דבש',
+   keys:['יוגורט תפוח דבש אגוזי מלך','יוגורט עם תפוח דבש ואגוזי מלך','יוגורט תפוח דבש','yogurt apple honey walnuts']},
+  {id:'hafuch_gadol_halash', cal:48.6, pro:2.6, fat:2.4, carb:3.4, srv:350, srvName:'הפוך גדול חלש',
+   keys:['הפוך גדול חלש','הפוך גדול','הפוך חלש','latte large weak','hafuch']},
+
+  {id:'two_eggs_hard', cal:154.5, pro:13.1, fat:10.4, carb:0.9, srv:55, srvName:'2 ביצים קשות',
+   keys:['2 ביצים קשות','שתי ביצים קשות','ביצים קשות','two hard boiled eggs','2 ביצים']},
+
 ];
 
 /* ═══════════════════════════════════

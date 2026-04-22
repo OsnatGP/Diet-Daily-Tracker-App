@@ -165,6 +165,15 @@
     .food-input::placeholder{color:var(--ink3)}
     .food-add{background:none;border:none;color:var(--blue);font-size:15px;font-weight:600;cursor:pointer;touch-action:manipulation;padding:4px 0;width:38px;text-align:right;font-family:inherit;white-space:nowrap}
     .food-add:active{opacity:.4}
+    .food-quick{display:flex;gap:6px;flex-wrap:wrap;padding:0 12px 10px;border-top:.5px solid var(--sep);padding-top:10px}
+    .food-quick-btn{
+      height:28px;padding:0 11px;border-radius:999px;
+      border:1.5px solid var(--sep);background:var(--fill2);
+      font-size:12px;font-weight:500;color:var(--ink2);
+      cursor:pointer;touch-action:manipulation;font-family:inherit;
+      white-space:nowrap;transition:background .12s,border-color .12s,color .12s;
+    }
+    .food-quick-btn:active{background:var(--fill);border-color:var(--ink3);color:var(--ink)}
     .food-item{display:flex;align-items:center;gap:8px;padding:11px 12px 11px 16px;position:relative;animation:fadeIn .18s ease}
     .food-item+.food-item::before{content:'';position:absolute;top:0;left:16px;right:0;height:.5px;background:var(--sep)}
     @keyframes fadeIn{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:translateY(0)}}
@@ -329,6 +338,12 @@
         autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="done"
         maxlength="55" onkeydown="if(event.key==='Enter')addFood()"/>
       <button class="food-add" onclick="addFood()">Add</button>
+    </div>
+    <div class="food-quick">
+      <button class="food-quick-btn" onclick="quickAdd('סלט ירקות עם טחינה')">סלט ירקות עם טחינה</button>
+      <button class="food-quick-btn" onclick="quickAdd('יוגורט תפוח דבש אגוזי מלך')">יוגורט תפוח דבש אגוזי מלך</button>
+      <button class="food-quick-btn" onclick="quickAdd('הפוך גדול חלש')">הפוך גדול חלש</button>
+      <button class="food-quick-btn" onclick="quickAdd('2 ביצים קשות')">2 ביצים קשות</button>
     </div>
     <div id="foodList"></div>
   </div>
@@ -1081,6 +1096,11 @@ function setLeptine(val){
 }
 function setMealsCount(val){
   const s=loadToday(); s.mealsCount=Math.max(0,Math.min(6,val)); saveToday(s); renderToday(s);
+}
+function quickAdd(text){
+  const el = document.getElementById('foodInput');
+  el.value = text;
+  addFood();
 }
 function addFood(){
   const el=document.getElementById('foodInput'); const t=el.value.trim(); if(!t){el.focus();return;}
