@@ -831,6 +831,16 @@ const FOOD_DB = [
   {id:'soy_sauce',      cal:53,  pro:8,  srv:15,  srvName:'כף סויה',
    keys:['סויה','רוטב סויה','soy sauce','tamari']},
 
+  /* ──── PERSONAL PRESETS ──── */
+  {id:'yogurt_apple_honey_walnuts', cal:384, pro:22.5, fat:13.6, carb:45.5, srv:100, srvName:'יוגורט דנונה פרו 20 + תפוח + 4 אגוזי מלך + 2כפות דבש',
+   keys:['יוגורט תפוח דבש אגוזי מלך','יוגורט עם תפוח דבש ואגוזי מלך','יוגורט תפוח דבש','yogurt apple honey walnuts']},
+  {id:'salad_tahini', cal:285, pro:9.4, fat:18.7, carb:25.6, srv:100, srvName:'סלט ירקות עם טחינה (10 עגבניות שרי, 2 מלפפון, פלפל, 2כפות טחינה)',
+   keys:['סלט ירקות עם טחינה','סלט עם טחינה','salad tahini']},
+  {id:'hafuch_gadol_halash', cal:170, pro:9, fat:8.5, carb:12, srv:100, srvName:'הפוך גדול חלש',
+   keys:['הפוך גדול חלש','הפוך גדול','הפוך חלש','latte large weak','hafuch']},
+  {id:'two_eggs_hard', cal:170, pro:14.4, fat:11.4, carb:1.0, srv:50, srvName:'2 ביצים קשות',
+   keys:['2 ביצים קשות','שתי ביצים קשות','ביצים קשות','two hard boiled eggs']},
+
 ];
 
 /* ═══════════════════════════════════
@@ -905,12 +915,16 @@ function lookupFood(rawText) {
   }
 
   /* 3. calculate */
-  const cal = Math.round(best.cal * grams / 100);
-  const pro = Math.round(best.pro * grams / 100 * 10) / 10;
+  const cal  = Math.round(best.cal  * grams / 100);
+  const pro  = Math.round((best.pro  || 0) * grams / 100 * 10) / 10;
+  const fat  = Math.round((best.fat  || 0) * grams / 100 * 10) / 10;
+  const carb = Math.round((best.carb || 0) * grams / 100 * 10) / 10;
 
   return {
     cal,
     pro,
+    fat,
+    carb,
     name:    best.srvName,
     grams:   Math.round(grams),
     found:   true,
