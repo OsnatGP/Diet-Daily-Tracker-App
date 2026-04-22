@@ -1722,5 +1722,25 @@ function esc(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/
 /* ════════════ INIT ════════════ */
 renderToday(loadToday());
 </script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => {
+        // בדוק עדכון בכל פתיחה
+        reg.update();
+        // אם יש גרסה חדשה — טען מחדש אוטומטית
+        reg.addEventListener('updatefound', () => {
+          const newSW = reg.installing;
+          newSW.addEventListener('statechange', () => {
+            if (newSW.state === 'activated') {
+              window.location.reload();
+            }
+          });
+        });
+      });
+  });
+}
+</script>
 </body>
 </html>
