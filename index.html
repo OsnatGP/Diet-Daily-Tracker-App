@@ -550,6 +550,33 @@
   </div>
 
   <!-- leptine streak -->
+  <div class="section-label" style="margin-top:6px">Waist Trend</div>
+  <div class="seg-wrap" id="waistSegWrap">
+    <div class="seg">
+      <button class="seg-btn active" onclick="setWaistPeriod('week',this)">Week</button>
+      <button class="seg-btn" onclick="setWaistPeriod('month',this)">Month</button>
+      <button class="seg-btn" onclick="setWaistPeriod('3month',this)">3 Months</button>
+    </div>
+  </div>
+  <div class="group" id="waistChartCard">
+    <div class="chart-wrap">
+      <div class="chart-title-row">
+        <div class="chart-title" id="waistChartTitle">Waist (cm)</div>
+        <div class="chart-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div>Waist</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--red);opacity:.5"></div>Goal</div>
+        </div>
+      </div>
+      <div class="chart-svg-wrap" id="waistChartSvg"></div>
+      <div class="chart-x-labels" id="waistChartXLabels"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--sep)">
+      <div class="pstat"><div class="pstat-val" id="waistMin" style="color:var(--green)">—</div><div class="pstat-lbl">Min</div></div>
+      <div class="pstat"><div class="pstat-val" id="waistAvg" style="color:var(--teal)">—</div><div class="pstat-lbl">Avg</div></div>
+      <div class="pstat"><div class="pstat-val" id="waistMax" style="color:var(--orange)">—</div><div class="pstat-lbl">Max</div></div>
+    </div>
+  </div>
+
   <div class="section-label" style="margin-top:6px">Leptine Streak</div>
   <div class="group">
     <div class="streak-hero">
@@ -1470,6 +1497,108 @@ function renderYearlyHist(hist,el){
 
 /* ════════════ STATS PAGE ════════════ */
 let weightPeriod='week';
+function setWaistPeriod(p,btn){
+  waistPeriod=p;
+  document.querySelectorAll('#waistSegWrap .seg-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); renderWaistChart();
+}
+let waistPeriod='week';
+
+function renderWaistChart(){
+  const hist=loadHistory();
+  const st=loadSettings();
+  const goal=st.waistGoal;
+  const today=new Date();
+  const n=waistPeriod==='week'?14:waistPeriod==='month'?30:90;
+
+  const points=[];
+  for(let i=n-1;i>=0;i--){
+    const d=new Date(today); d.setDate(today.getDate()-i);
+    const key=d.toISOString().slice(0,10);
+    points.push({key,date:d,waist:hist[key]?.waist||null});
+  }
+  const td=loadToday();
+  const todayIdx=points.findIndex(p=>p.key===todayKey());
+  if(todayIdx>=0 && td.waist) points[todayIdx].waist=td.waist;
+
+  const values=points.map(p=>p.waist).filter(v=>v!==null);
+
+  if(!values.length){
+    document.getElementById('waistChartSvg').innerHTML='<div class="chart-no-data">No waist data yet.<br>Start logging in Today.</div>';
+    document.getElementById('waistChartXLabels').innerHTML='';
+    ['waistMin','waistAvg','waistMax'].forEach(id=>document.getElementById(id).textContent='—');
+    return;
+  }
+
+  const minW=Math.min(...values),maxW=Math.max(...values);
+  const avgW=Math.round(values.reduce((a,b)=>a+b,0)/values.length*10)/10;
+  document.getElementById('waistMin').textContent=minW+'cm';
+  document.getElementById('waistAvg').textContent=avgW+'cm';
+  document.getElementById('waistMax').textContent=maxW+'cm';
+
+  const W=340,H=140,PAD={t:10,r:12,b:10,l:36};
+  const chartW=W-PAD.l-PAD.r,chartH=H-PAD.t-PAD.b;
+  const allVals=[...values]; if(goal) allVals.push(goal);
+  const yMin=Math.min(...allVals)-1,yMax=Math.max(...allVals)+1;
+  const toX=i=>PAD.l+(i/(points.length-1))*chartW;
+  const toY=v=>PAD.t+((yMax-v)/(yMax-yMin))*chartH;
+
+  let gridLines='',yLabels='';
+  for(let i=0;i<=4;i++){
+    const v=yMin+(yMax-yMin)*(i/4),y=toY(v);
+    gridLines+=`<line x1="${PAD.l}" y1="${y}" x2="${W-PAD.r}" y2="${y}" stroke="rgba(60,60,67,.08)" stroke-width="1"/>`;
+    yLabels+=`<text x="${PAD.l-4}" y="${y+4}" text-anchor="end" font-size="9" fill="rgba(60,60,67,.4)">${Math.round(v)}</text>`;
+  }
+
+  let goalLine='';
+  if(goal){
+    const gy=toY(goal);
+    goalLine=`<line x1="${PAD.l}" y1="${gy}" x2="${W-PAD.r}" y2="${gy}" stroke="var(--red)" stroke-width="1" stroke-dasharray="4,3" opacity=".6"/>
+    <text x="${W-PAD.r+2}" y="${gy+4}" font-size="9" fill="var(--red)" opacity=".7">${goal}</text>`;
+  }
+
+  const filledIdx=points.map((p,i)=>p.waist!==null?i:-1).filter(i=>i>=0);
+  let pathStr='';
+  if(filledIdx.length>=2){
+    let d=`M ${toX(filledIdx[0])} ${toY(points[filledIdx[0]].waist)}`;
+    for(let k=1;k<filledIdx.length;k++){
+      const x=toX(filledIdx[k]),y=toY(points[filledIdx[k]].waist);
+      const px=toX(filledIdx[k-1]),py=toY(points[filledIdx[k-1]].waist);
+      const cx=(x+px)/2;
+      d+=` C ${cx} ${py}, ${cx} ${y}, ${x} ${y}`;
+    }
+    const first=filledIdx[0],last2=filledIdx[filledIdx.length-1];
+    const areaD=d+` L ${toX(last2)} ${H-PAD.b} L ${toX(first)} ${H-PAD.b} Z`;
+    pathStr=`<path d="${areaD}" fill="url(#wGrad2)" opacity=".15"/>
+    <path d="${d}" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round"/>`;
+  } else if(filledIdx.length===1){
+    pathStr=`<circle cx="${toX(filledIdx[0])}" cy="${toY(points[filledIdx[0]].waist)}" r="3" fill="var(--teal)"/>`;
+  }
+
+  let dots='';
+  filledIdx.forEach(i=>{
+    const x=toX(i),y=toY(points[i].waist),isT=points[i].key===todayKey();
+    dots+=`<circle cx="${x}" cy="${y}" r="${isT?4:3}" fill="${isT?'var(--teal)':'#fff'}" stroke="var(--teal)" stroke-width="2"/>`;
+    if(isT) dots+=`<text x="${x}" y="${y-7}" text-anchor="middle" font-size="9" fill="var(--teal)" font-weight="700">${points[i].waist}</text>`;
+  });
+
+  const svg=`<svg width="100%" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="wGrad2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--teal)"/><stop offset="100%" stop-color="var(--teal)" stop-opacity="0"/></linearGradient></defs>
+    ${gridLines}${yLabels}${goalLine}${pathStr}${dots}
+  </svg>`;
+  document.getElementById('waistChartSvg').innerHTML=svg;
+
+  const step=Math.max(1,Math.floor(points.length/5));
+  let xlabels='';
+  points.forEach((p,i)=>{
+    if(i%step===0||i===points.length-1){
+      const d=p.date;
+      xlabels+=`<span>${d.getDate()} ${d.toLocaleDateString('en-US',{month:'short'})}</span>`;
+    }
+  });
+  document.getElementById('waistChartXLabels').innerHTML=xlabels;
+}
+
 function setWeightPeriod(p,btn){
   weightPeriod=p;
   document.querySelectorAll('#weightSegWrap .seg-btn').forEach(b=>b.classList.remove('active'));
@@ -1543,6 +1672,7 @@ function renderStats(){
   updateNutrGoalSubs(st);
   renderBMI(st);
   renderWeightChart();
+  renderWaistChart();
   renderLeptineStats();
 }
 
