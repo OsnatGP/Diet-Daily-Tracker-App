@@ -468,6 +468,13 @@
         oninput="saveHeight()" onblur="saveHeight()"/>
       <span style="font-size:15px;color:var(--ink2);margin-left:4px">cm</span>
     </div>
+    <div style="height:.5px;background:var(--sep);margin:0 16px"></div>
+    <div class="goal-set-row">
+      <div><div class="goal-set-label">Waist goal</div><div class="goal-set-sub" id="waistGoalSub">Set target circumference</div></div>
+      <input class="goal-input" id="waistGoalInput" type="number" step="0.5" min="40" max="200" placeholder="—"
+        oninput="saveWaistGoal()" onblur="saveWaistGoal()"/>
+      <span style="font-size:15px;color:var(--ink2);margin-left:4px">cm</span>
+    </div>
   </div>
 
   <!-- BMI -->
@@ -1256,6 +1263,13 @@ function removeFood(i){
 function confirmReset(){
   if(confirm('Reset today\'s data?')){ saveToday(freshDay()); renderToday(loadToday()); }
 }
+function saveWaistGoal(){
+  const v = parseFloat(document.getElementById('waistGoalInput').value);
+  const st = loadSettings();
+  st.waistGoal = isNaN(v) ? null : Math.round(v * 10) / 10;
+  saveSettings(st);
+  renderStats();
+}
 function saveHeight(){
   const v = parseInt(document.getElementById('heightInput').value);
   const st = loadSettings();
@@ -1512,6 +1526,20 @@ function renderStats(){
   const pgi=document.getElementById('proGoalInput');
   if(st.calGoal && !cgi.matches(':focus')) cgi.value=st.calGoal;
   if(st.proGoal && !pgi.matches(':focus')) pgi.value=st.proGoal;
+  // waist goal
+  const wgi = document.getElementById('waistGoalInput');
+  if(st.waistGoal && !wgi.matches(':focus')) wgi.value = st.waistGoal;
+  // waist goal sub
+  const todayWaist = loadToday().waist;
+  const wSub = document.getElementById('waistGoalSub');
+  if(st.waistGoal && todayWaist){
+    const diff = Math.round((todayWaist - st.waistGoal)*10)/10;
+    wSub.textContent = diff === 0 ? 'Goal reached! 🎉' :
+      diff > 0 ? `${diff} cm above goal (${st.waistGoal} cm)` :
+                 `${Math.abs(diff)} cm below goal (${st.waistGoal} cm)`;
+  } else {
+    wSub.textContent = st.waistGoal ? `Goal: ${st.waistGoal} cm` : 'Set target circumference';
+  }
   updateNutrGoalSubs(st);
   renderBMI(st);
   renderWeightChart();
